@@ -88,4 +88,6 @@ in
     enableDefaultConfig = false;
     settings."*".IdentityAgent = "~/.1password/agent.sock";
   };
+
+  programs.codex.enable = true;
 }
