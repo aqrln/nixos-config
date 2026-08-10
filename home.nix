@@ -25,6 +25,7 @@ in
   ];
 
   xdg.configFile."konsolerc".source = fromRepo "konsole/konsolerc";
+  xdg.configFile."zellij/config.kdl".source = fromRepo "zellij/config.kdl";
 
   xdg.dataFile =
     lib.mapAttrs' (
