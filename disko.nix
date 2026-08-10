@@ -74,6 +74,8 @@
                   ];
                 };
 
+                "/@/.snapshots" = {};
+
                 "/@home" = {
                   mountpoint = "/home";
                   mountOptions = [
@@ -81,6 +83,8 @@
                     "noatime"
                   ];
                 };
+
+                "/@home/.snapshots" = {};
 
                 "/@nix" = {
                   mountpoint = "/nix";
@@ -97,6 +101,8 @@
                     "noatime"
                   ];
                 };
+
+                "/@persist/.snapshots" = {};
               };
             };
           };
