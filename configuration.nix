@@ -34,6 +34,24 @@
     };
   };
 
+  fonts = {
+    packages = with pkgs; [
+      fantasque-sans-mono
+    ];
+
+    fontconfig = {
+      antialias = true;
+      hinting = {
+        enable = true;
+        style = "slight";
+      };
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "default";
+      };
+    };
+  };
+
   services.desktopManager.plasma6.enable = true;
   services.displayManager.plasma-login-manager.enable = true;
 
@@ -110,4 +128,3 @@
 
   system.stateVersion = "26.05";
 }
-
