@@ -82,7 +82,24 @@
         "disko": "disko",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "selenized": "selenized"
+      }
+    },
+    "selenized": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759097196,
+        "narHash": "sha256-gS+LdNHGjai4EJXmJXORbWSY2vTxdL9w89HMR+sNldY=",
+        "owner": "jan-warchol",
+        "repo": "selenized",
+        "rev": "9a753d5c575c48e29eeb2be745d9571b4cec42b3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jan-warchol",
+        "repo": "selenized",
+        "type": "github"
       }
     }
   },

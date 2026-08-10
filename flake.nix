@@ -13,6 +13,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    selenized = {
+      url = "github:jan-warchol/selenized";
+      flake = false;
+    };
   };
 
   outputs = {self, nixpkgs, disko, home-manager, ...}@inputs: {
