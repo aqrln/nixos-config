@@ -20,6 +20,11 @@
 
   boot.zswap.enable = true;
 
+  boot.plymouth = {
+    enable = true;
+    theme = "tribar";
+  };
+
   networking.hostName = "vetiver";
 
   networking.networkmanager.enable = true;
