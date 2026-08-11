@@ -30,17 +30,43 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      benchmarks = import ./benchmark-vetiver.nix { inherit pkgs; };
       install-vetiver = import ./install-vetiver.nix { inherit disko pkgs system; };
     in
     {
       formatter.x86_64-linux = pkgs.nixfmt-tree;
 
-      apps.${system}.install-vetiver = {
-        type = "app";
-        program = "${install-vetiver}/bin/install-vetiver";
+      apps.${system} = {
+        install-vetiver = {
+          type = "app";
+          program = "${install-vetiver}/bin/install-vetiver";
+        };
+
+        benchmark-nvme = {
+          type = "app";
+          program = "${benchmarks.nvme}/bin/benchmark-nvme";
+        };
+
+        benchmark-luks = {
+          type = "app";
+          program = "${benchmarks.luks}/bin/benchmark-luks";
+        };
+
+        benchmark-filesystem = {
+          type = "app";
+          program = "${benchmarks.filesystem}/bin/benchmark-filesystem";
+        };
+
+        benchmark-vetiver = {
+          type = "app";
+          program = "${benchmarks.all}/bin/benchmark-vetiver";
+        };
       };
 
-      packages.${system}.install-vetiver = install-vetiver;
+      packages.${system} = {
+        inherit install-vetiver;
+        vetiver-benchmarks = benchmarks.package;
+      };
 
       nixosConfigurations.vetiver = inputs.nixpkgs.lib.nixosSystem {
         inherit system;
