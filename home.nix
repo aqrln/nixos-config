@@ -30,16 +30,6 @@ in
   ];
 
   xdg.configFile = {
-    "autostart/1password.desktop".text = ''
-      [Desktop Entry]
-      Name=1Password
-      Exec=${lib.getExe pkgs._1password-gui} --silent
-      Terminal=false
-      Type=Application
-      Icon=1password
-      StartupWMClass=1Password
-      X-GNOME-Autostart-enabled=true
-    '';
     "konsolerc".source = fromRepo "konsole/konsolerc";
     "kwinrulesrc".source = fromRepo "plasma/kwinrulesrc";
     "zellij/config.kdl".source = fromRepo "zellij/config.kdl";
@@ -62,7 +52,22 @@ in
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
       "plasma/look-and-feel/my-dark".source = fromRepo "plasma/look-and-feel/my-dark";
       "plasma/look-and-feel/my-light".source = fromRepo "plasma/look-and-feel/my-light";
+  };
+
+  systemd.user.services.onepassword = {
+    Unit = {
+      Description = "1Password";
+      After = [ "plasma-plasmashell.service" ];
+      PartOf = [ "graphical-session.target" ];
     };
+    Service = {
+      ExecStartPre = ''
+        ${lib.getExe pkgs.bash} -c 'until ${lib.getExe' pkgs.systemd "busctl"} --user status org.kde.StatusNotifierWatcher >/dev/null 2>&1; do sleep 0.1; done'
+      '';
+      ExecStart = "${lib.getExe pkgs._1password-gui} --silent";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 
   programs.foot = {
     enable = true;
