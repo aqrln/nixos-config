@@ -52,7 +52,7 @@ in
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
       "plasma/look-and-feel/my-dark".source = fromRepo "plasma/look-and-feel/my-dark";
       "plasma/look-and-feel/my-light".source = fromRepo "plasma/look-and-feel/my-light";
-  };
+    };
 
   systemd.user.services.onepassword = {
     Unit = {
