@@ -29,6 +29,11 @@
                 name = "cryptlvm";
                 passwordFile = "/tmp/disk.key";
 
+                extraFormatArgs = [
+                  "--sector-size"
+                  "4096"
+                ];
+
                 settings = {
                   allowDiscards = true;
                 };

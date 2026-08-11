@@ -27,11 +27,23 @@
       home-manager,
       ...
     }@inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      install-vetiver = import ./install-vetiver.nix { inherit disko pkgs system; };
+    in
     {
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+      formatter.x86_64-linux = pkgs.nixfmt-tree;
+
+      apps.${system}.install-vetiver = {
+        type = "app";
+        program = "${install-vetiver}/bin/install-vetiver";
+      };
+
+      packages.${system}.install-vetiver = install-vetiver;
 
       nixosConfigurations.vetiver = inputs.nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         specialArgs.inputs = inputs;
         modules = [
           disko.nixosModules.disko
