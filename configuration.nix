@@ -96,7 +96,10 @@
 
   users.users.aqrln = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "kvm"
+    ];
     shell = pkgs.fish;
   };
 

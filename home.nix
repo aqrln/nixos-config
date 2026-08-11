@@ -35,6 +35,7 @@ in
     papirus-icon-theme
     pkg-config
     python3
+    qemu
     rustup
   ];
 
