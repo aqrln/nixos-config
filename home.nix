@@ -48,6 +48,21 @@ in
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
     };
 
+  programs.foot = {
+    enable = true;
+    settings = {
+      main = {
+        font = "Fantasque Sans Mono:size=10.5:fontfeatures=ss01";
+        gamma-correct-blending = "yes";
+        initial-window-mode = "maximized";
+        include = "${pkgs.foot.themes}/share/foot/themes/selenized";
+        initial-color-theme = "dark";
+      };
+      csd.size = 0;
+      key-bindings.color-theme-toggle = "Control+Shift+t";
+    };
+  };
+
   programs.git = {
     enable = true;
     signing = {
