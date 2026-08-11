@@ -18,6 +18,10 @@ let
 
 in
 {
+  imports = [
+    ./helix
+  ];
+
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
@@ -39,25 +43,6 @@ in
     // {
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
     };
-
-  programs.helix = {
-    enable = true;
-    themes.selenized = builtins.fromTOML (builtins.readFile ./helix/selenized.toml);
-    settings = {
-      theme = "selenized";
-      editor.shell = ["fish" "-c"];
-    };
-    languages.rust-analyzer.config.cargo = {
-      allFeatures = true;
-      targetDir = true;
-    };
-    languages.language = [
-      {
-        name = "markdown";
-        soft-wrap.enable = true;
-      }
-    ];
-  };
 
   programs.git = {
     enable = true;
