@@ -42,8 +42,9 @@ in
 
   programs.helix = {
     enable = true;
+    themes.selenized = builtins.fromTOML (builtins.readFile ./helix/selenized.toml);
     settings = {
-      # theme = "solarized_dark";
+      theme = "selenized";
       editor.shell = ["fish" "-c"];
     };
     languages.rust-analyzer.config.cargo = {
