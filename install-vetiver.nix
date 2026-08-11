@@ -100,6 +100,9 @@ pkgs.writeShellApplication {
     mv /mnt/etc/nixos/hardware-configuration.nix /mnt/home/aqrln/nixos/hardware-configuration.nix
     ln -sfn /home/aqrln/nixos/flake.nix /mnt/etc/nixos/flake.nix
 
+    echo "Set user password for aqrln"
+    nixos-enter --root /mnt -c 'passwd aqrln'
+
     rm -f "$key_file"
     trap - EXIT
     echo "Installation complete. You may reboot."
