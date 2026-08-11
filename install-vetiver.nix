@@ -9,6 +9,7 @@ pkgs.writeShellApplication {
   runtimeInputs = [
     disko.packages.${system}.disko
     pkgs.coreutils
+    pkgs.git
     pkgs.gnugrep
     pkgs.nixos-install-tools
     pkgs.nvme-cli
@@ -89,6 +90,13 @@ pkgs.writeShellApplication {
 
     disko --mode destroy,format,mount "$repo_dir/disko.nix"
     nixos-install --root /mnt --flake "$repo_dir#vetiver"
+
+    git clone --no-hardlinks "$repo_dir" /mnt/home/aqrln/nixos
+    nixos-enter --root /mnt -c \
+      'chown -R aqrln:users /home/aqrln/nixos'
+
+    rm -f /mnt/etc/nixos/configuration.nix
+    ln -sfn /home/aqrln/nixos/flake.nix /mnt/etc/nixos/flake.nix
 
     rm -f "$key_file"
     trap - EXIT
