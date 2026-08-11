@@ -95,7 +95,9 @@ pkgs.writeShellApplication {
     nixos-enter --root /mnt -c \
       'chown -R aqrln:users /home/aqrln/nixos'
 
+    nixos-generate-config --no-filesystems --root /mnt
     rm -f /mnt/etc/nixos/configuration.nix
+    mv /mnt/etc/nixos/hardware-configuration.nix /mnt/home/aqrln/nixos/hardware-configuration.nix
     ln -sfn /home/aqrln/nixos/flake.nix /mnt/etc/nixos/flake.nix
 
     rm -f "$key_file"
