@@ -20,5 +20,12 @@ LayoutName=org.kde.breeze.desktop
 library=org.kde.breeze
 theme=Breeze
 
+[kscreenlockerrc][Greeter]
+WallpaperPlugin=org.kde.image
+
+[kscreenlockerrc][Greeter][Wallpaper][org.kde.image][General]
+Image=file:///run/current-system/sw/share/wallpapers/ScarletTree/
+PreviewImage=file:///run/current-system/sw/share/wallpapers/ScarletTree/
+
 [plasmarc][Theme]
 name=default
