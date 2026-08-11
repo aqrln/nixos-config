@@ -32,14 +32,18 @@ in
   xdg.configFile."zellij/config.kdl".source = fromRepo "zellij/config.kdl";
 
   xdg.dataFile =
-    lib.mapAttrs' (
-      name: _:
-      lib.nameValuePair "konsole/${name}" {
-        source = inputs.selenized + "/terminals/konsole/${name}";
-      }
-    ) (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".colorscheme" name) (
-      builtins.readDir (inputs.selenized + "/terminals/konsole")
-    ))
+    lib.mapAttrs'
+      (
+        name: _:
+        lib.nameValuePair "konsole/${name}" {
+          source = inputs.selenized + "/terminals/konsole/${name}";
+        }
+      )
+      (
+        lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".colorscheme" name) (
+          builtins.readDir (inputs.selenized + "/terminals/konsole")
+        )
+      )
     // {
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
     };

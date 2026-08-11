@@ -19,22 +19,32 @@
     };
   };
 
-  outputs = {self, nixpkgs, disko, home-manager, ...}@inputs: {
-    nixosConfigurations.vetiver = inputs.nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs.inputs = inputs;
-      modules = [
-        disko.nixosModules.disko
-        ./disko.nix
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.users.aqrln = ./home.nix;
-        }
-      ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      disko,
+      home-manager,
+      ...
+    }@inputs:
+    {
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+
+      nixosConfigurations.vetiver = inputs.nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs.inputs = inputs;
+        modules = [
+          disko.nixosModules.disko
+          ./disko.nix
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.users.aqrln = ./home.nix;
+          }
+        ];
+      };
     };
-  };
 }

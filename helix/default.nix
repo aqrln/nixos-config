@@ -6,7 +6,10 @@
 
     settings = {
       theme = "selenized";
-      editor.shell = [ "fish" "-c" ];
+      editor.shell = [
+        "fish"
+        "-c"
+      ];
     };
 
     languages.rust-analyzer.config.cargo = {

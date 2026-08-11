@@ -74,7 +74,7 @@
                   ];
                 };
 
-                "/@/.snapshots" = {};
+                "/@/.snapshots" = { };
 
                 "/@home" = {
                   mountpoint = "/home";
@@ -84,7 +84,7 @@
                   ];
                 };
 
-                "/@home/.snapshots" = {};
+                "/@home/.snapshots" = { };
 
                 "/@nix" = {
                   mountpoint = "/nix";
@@ -102,7 +102,7 @@
                   ];
                 };
 
-                "/@persist/.snapshots" = {};
+                "/@persist/.snapshots" = { };
               };
             };
           };
