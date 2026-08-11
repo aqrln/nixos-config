@@ -41,6 +41,7 @@ in
       X-GNOME-Autostart-enabled=true
     '';
     "konsolerc".source = fromRepo "konsole/konsolerc";
+    "kwinrulesrc".source = fromRepo "plasma/kwinrulesrc";
     "zellij/config.kdl".source = fromRepo "zellij/config.kdl";
   };
 
@@ -59,6 +60,8 @@ in
       )
     // {
       "konsole/Default.profile".source = fromRepo "konsole/Default.profile";
+      "plasma/look-and-feel/my-dark".source = fromRepo "plasma/look-and-feel/my-dark";
+      "plasma/look-and-feel/my-light".source = fromRepo "plasma/look-and-feel/my-light";
     };
 
   programs.foot = {

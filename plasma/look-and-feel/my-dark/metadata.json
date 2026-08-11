@@ -1,0 +1,19 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "",
+                "Name": ""
+            }
+        ],
+        "Description": "",
+        "Id": "my-dark",
+        "License": "",
+        "Name": "aqrln-dark",
+        "Website": ""
+    },
+    "Keywords": "Desktop;Workspace;Appearance;Look and Feel;",
+    "X-Plasma-APIVersion": "2",
+    "X-Plasma-MainScript": "default"
+}

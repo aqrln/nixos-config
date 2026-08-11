@@ -1,0 +1,10 @@
+[General]
+count=1
+rules=b7ee0241-6315-4e40-a70b-b4ef24ae5d8f
+
+[b7ee0241-6315-4e40-a70b-b4ef24ae5d8f]
+Description=Application settings for foot
+noborder=true
+noborderrule=3
+wmclass=foot
+wmclassmatch=1
