@@ -1,6 +1,6 @@
 {
   services.snapper = {
-    snapshotInterval = "hourly";
+    snapshotInterval = "*-*-* 00/6:00:00";
     cleanupInterval = "1d";
     persistentTimer = true;
 
