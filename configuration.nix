@@ -114,15 +114,11 @@
 
   environment.systemPackages = with pkgs; [
     fd
-    gcc
-    gnumake
     git
     helix
     htop
     jujutsu
-    pkg-config
     ripgrep
-    rustup
     wget
     zellij
   ];

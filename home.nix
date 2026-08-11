@@ -25,8 +25,12 @@ in
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
+    gcc
+    gnumake
     nil
     papirus-icon-theme
+    pkg-config
+    rustup
   ];
 
   xdg.configFile = {
