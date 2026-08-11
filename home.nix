@@ -25,11 +25,16 @@ in
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
+    freecad
     gcc
     gnumake
+    kicad
+    libreoffice-qt-fresh
+    lingot
     nil
     papirus-icon-theme
     pkg-config
+    python3
     rustup
   ];
 
