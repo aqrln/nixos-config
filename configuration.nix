@@ -120,6 +120,7 @@
     jujutsu
     ripgrep
     wget
+    wl-clipboard
     zellij
   ];
 
