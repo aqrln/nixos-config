@@ -29,8 +29,20 @@ in
     papirus-icon-theme
   ];
 
-  xdg.configFile."konsolerc".source = fromRepo "konsole/konsolerc";
-  xdg.configFile."zellij/config.kdl".source = fromRepo "zellij/config.kdl";
+  xdg.configFile = {
+    "autostart/1password.desktop".text = ''
+      [Desktop Entry]
+      Name=1Password
+      Exec=${lib.getExe pkgs._1password-gui} --silent
+      Terminal=false
+      Type=Application
+      Icon=1password
+      StartupWMClass=1Password
+      X-GNOME-Autostart-enabled=true
+    '';
+    "konsolerc".source = fromRepo "konsole/konsolerc";
+    "zellij/config.kdl".source = fromRepo "zellij/config.kdl";
+  };
 
   xdg.dataFile =
     lib.mapAttrs'
