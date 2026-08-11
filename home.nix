@@ -26,6 +26,7 @@ in
 
   home.packages = with pkgs; [
     nil
+    papirus-icon-theme
   ];
 
   xdg.configFile."konsolerc".source = fromRepo "konsole/konsolerc";
