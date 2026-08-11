@@ -31,6 +31,7 @@ in
     kicad
     libreoffice-qt-fresh
     lingot
+    nh
     nil
     papirus-icon-theme
     pkg-config
