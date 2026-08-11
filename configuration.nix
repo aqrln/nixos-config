@@ -84,10 +84,13 @@
     settings = {
       CPU_DRIVER_OPMODE_ON_AC = "active";
       CPU_DRIVER_OPMODE_ON_BAT = "active";
+      CPU_DRIVER_OPMODE_ON_SAV = "active";
       CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+      CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
       CPU_BOOST_ON_AC = 1;
       CPU_BOOST_ON_BAT = 1;
+      CPU_BOOST_ON_SAV = 0;
     };
   };
 
