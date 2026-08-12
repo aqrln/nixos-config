@@ -16,6 +16,36 @@ let
   # assumes the system flake is in ~/nixos
   fromRepo = path: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/${path}";
 
+  kdePackages = with pkgs.kdePackages; [
+    kmail
+    kmail-account-wizard
+    merkuro
+  ];
+
+  devToolsPackages = with pkgs; [
+    gcc
+    gnumake
+    pkg-config
+    python3
+    qemu
+    rustup
+  ];
+
+  lspPackages = with pkgs; [
+    nil
+  ];
+
+  desktopApps = with pkgs; [
+    freecad
+    kicad
+    libreoffice-qt-fresh
+    lingot
+  ];
+
+  miscPackages = with pkgs; [
+    papirus-icon-theme
+  ];
+
 in
 {
   imports = [
@@ -24,23 +54,7 @@ in
 
   home.stateVersion = "26.05";
 
-  home.packages = with pkgs; [
-    freecad
-    gcc
-    gnumake
-    kdePackages.kmail
-    kdePackages.kmail-account-wizard
-    kdePackages.merkuro
-    kicad
-    libreoffice-qt-fresh
-    lingot
-    nil
-    papirus-icon-theme
-    pkg-config
-    python3
-    qemu
-    rustup
-  ];
+  home.packages = kdePackages ++ devToolsPackages ++ lspPackages ++ desktopApps ++ miscPackages;
 
   xdg.configFile = {
     "konsolerc".source = fromRepo "konsole/konsolerc";
