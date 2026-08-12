@@ -113,7 +113,7 @@
 
   programs.firefox.enable = true;
 
-  program.nh.enable = true;
+  programs.nh.enable = true;
 
   programs.nix-ld.enable = true;
 
