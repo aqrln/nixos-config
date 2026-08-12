@@ -83,7 +83,7 @@ in
     enable = true;
     settings = {
       main = {
-        font = "Fantasque Sans Mono:size=10.5:fontfeatures=ss01";
+        font = "Fantasque Sans Mono:size=11:fontfeatures=ss01";
         gamma-correct-blending = "yes";
         initial-window-mode = "maximized";
         include = "${pkgs.foot.themes}/share/foot/themes/selenized";
