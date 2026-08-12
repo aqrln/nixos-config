@@ -28,6 +28,9 @@ in
     freecad
     gcc
     gnumake
+    kdePackages.kmail
+    kdePackages.kmail-account-wizard
+    kdePackages.merkuro
     kicad
     libreoffice-qt-fresh
     lingot
