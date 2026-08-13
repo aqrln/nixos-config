@@ -165,4 +165,10 @@ in
   programs.codex.enable = true;
 
   programs.zellij.enable = true;
+
+  programs.obsidian = {
+    enable = true;
+    cli.enable = true;
+    vaults.lore.target = "lore";
+  };
 }
