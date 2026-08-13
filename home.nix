@@ -23,7 +23,6 @@ let
   ];
 
   devToolsPackages = with pkgs; [
-    gcc
     gnumake
     pkg-config
     python3
@@ -96,6 +95,8 @@ in
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
+  programs.fd.enable = true;
+
   programs.foot = {
     enable = true;
     settings = {
@@ -110,6 +111,8 @@ in
       key-bindings.color-theme-toggle = "Control+Shift+t";
     };
   };
+
+  programs.gcc.enable = true;
 
   programs.git = {
     enable = true;
@@ -151,6 +154,8 @@ in
     };
   };
 
+  programs.ripgrep.enable = true;
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
@@ -158,4 +163,6 @@ in
   };
 
   programs.codex.enable = true;
+
+  programs.zellij.enable = true;
 }

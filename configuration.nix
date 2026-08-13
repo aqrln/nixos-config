@@ -113,6 +113,10 @@
 
   programs.firefox.enable = true;
 
+  programs.git.enable = true;
+
+  programs.htop.enable = true;
+
   programs.nh.enable = true;
 
   programs.nix-ld.enable = true;
@@ -121,15 +125,9 @@
   programs.steam.enable = true;
 
   environment.systemPackages = with pkgs; [
-    fd
-    git
     helix
-    htop
-    jujutsu
-    ripgrep
     wget
     wl-clipboard
-    zellij
   ];
 
   nix.settings.experimental-features = [
