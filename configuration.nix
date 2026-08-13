@@ -126,6 +126,9 @@
 
   environment.systemPackages = with pkgs; [
     helix
+    lm_sensors
+    ryzenadj
+    s-tui
     wget
     wl-clipboard
   ];
