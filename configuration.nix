@@ -78,6 +78,22 @@
 
   services.power-profiles-daemon.enable = false;
 
+  services.thinkfan = {
+    enable = true;
+    levels = [
+      [
+        "level auto"
+        0
+        95
+      ]
+      [
+        "level full-speed"
+        85
+        32767
+      ]
+    ];
+  };
+
   services.tlp = {
     enable = true;
     pd.enable = true;
