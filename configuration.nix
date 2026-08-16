@@ -19,6 +19,9 @@
     enable = true;
     pkiBundle = "/var/lib/sbctl";
     autoGenerateKeys.enable = true;
+    # autoEnrollKeys is not enabled. Reset to Setup Mode in BIOS, then run
+    # `sudo sbctl enroll-keys --microsoft --ignore-immutable`, reboot and
+    # enable secure boot after installing the system.
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
