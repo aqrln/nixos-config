@@ -13,8 +13,13 @@
     ./snapper.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+    autoGenerateKeys.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -64,6 +69,21 @@
   };
 
   services.fprintd.enable = true;
+
+  services.fwupd = {
+    enable = true;
+    # workaround for lanzaboote compatibility until
+    # https://github.com/nix-community/lanzaboote/pull/640 is merged
+    package = pkgs.fwupd.overrideAttrs (old: {
+      mesonFlags = map (
+        flag:
+        if lib.hasPrefix (lib.mesonOption "efi_app_location" "") flag then
+          lib.mesonOption "efi_app_location" "/run/fwupd-efi"
+        else
+          flag
+      ) old.mesonFlags;
+    });
+  };
 
   services.desktopManager.plasma6.enable = true;
   services.displayManager.plasma-login-manager.enable = true;
@@ -145,6 +165,7 @@
     lm_sensors
     ryzenadj
     s-tui
+    sbctl
     wget
     wl-clipboard
   ];

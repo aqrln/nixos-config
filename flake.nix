@@ -9,6 +9,10 @@
       url = "github:NixOS/nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,6 +28,7 @@
       self,
       nixpkgs,
       disko,
+      lanzaboote,
       home-manager,
       ...
     }@inputs:
@@ -73,6 +78,7 @@
         specialArgs.inputs = inputs;
         modules = [
           disko.nixosModules.disko
+          lanzaboote.nixosModules.lanzaboote
           ./disko.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
