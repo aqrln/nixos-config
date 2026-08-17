@@ -12,8 +12,8 @@
       ];
     };
 
-    languages.rust-analyzer.config.cargo = {
-      allFeatures = true;
+    languages.language-server.rust-analyzer.config.cargo = {
+      features = "all";
       targetDir = true;
     };
 
