@@ -155,6 +155,8 @@
 
   programs.htop.enable = true;
 
+  programs.kdeconnect.enable = true;
+
   programs.nh.enable = true;
 
   programs.nix-ld.enable = true;
