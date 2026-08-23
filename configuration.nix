@@ -38,11 +38,6 @@
     device = "TPPS/2 Elan TrackPoint";
     sensitivity = 180;
     press_to_select = true;
-    thresh = 3;
-    ztime = 50;
-    mindrag = 3;
-    draghys = 127;
-    drift_time = 25;
   };
 
   networking.hostName = "vetiver";
