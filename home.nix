@@ -38,7 +38,12 @@ let
     freecad
     kicad
     libreoffice-qt-fresh
+  ];
+
+  audioPackages = with pkgs; [
+    kmetronome
     lingot
+    qpwgraph
   ];
 
   miscPackages = with pkgs; [
@@ -53,7 +58,8 @@ in
 
   home.stateVersion = "26.05";
 
-  home.packages = kdePackages ++ devToolsPackages ++ lspPackages ++ desktopApps ++ miscPackages;
+  home.packages =
+    kdePackages ++ devToolsPackages ++ lspPackages ++ desktopApps ++ audioPackages ++ miscPackages;
 
   xdg.configFile = {
     "konsolerc".source = fromRepo "konsole/konsolerc";
@@ -170,5 +176,10 @@ in
     enable = true;
     cli.enable = true;
     vaults.lore.target = "lore";
+  };
+
+  services.fluidsynth = {
+    enable = true;
+    soundService = "pipewire-pulse";
   };
 }
