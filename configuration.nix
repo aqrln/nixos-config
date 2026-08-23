@@ -33,6 +33,18 @@
     theme = "tribar";
   };
 
+  hardware.trackpoint = {
+    enable = true;
+    device = "TPPS/2 Elan TrackPoint";
+    sensitivity = 180;
+    press_to_select = true;
+    thresh = 3;
+    ztime = 26;
+    mindrag = 8;
+    draghys = 127;
+    drift_time = 25;
+  };
+
   networking.hostName = "vetiver";
 
   networking.networkmanager.enable = true;
