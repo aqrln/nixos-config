@@ -55,6 +55,7 @@ in
 {
   imports = [
     ./helix
+    ./emacs
   ];
 
   home.stateVersion = "26.05";

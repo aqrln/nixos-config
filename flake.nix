@@ -21,6 +21,10 @@
       url = "github:jan-warchol/selenized";
       flake = false;
     };
+    kitty-graphics = {
+      url = "github:cashmeredev/kitty-graphics.el";
+      flake = false;
+    };
   };
 
   outputs =
