@@ -37,7 +37,7 @@ let
   desktopApps = with pkgs; [
     freecad
     kicad
-    libreoffice-qt-fresh
+    libreoffice-qt-stable
   ];
 
   audioPackages = with pkgs; [
