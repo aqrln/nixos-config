@@ -32,6 +32,7 @@ let
 
   lspPackages = with pkgs; [
     nil
+    tombi
   ];
 
   desktopApps = with pkgs; [
