@@ -227,6 +227,13 @@
   :config
   (marginalia-mode))
 
+;; Jump directly to visible characters and words using labeled targets.
+(use-package avy
+  :bind (("C-:" . avy-goto-char)
+         ("C-'" . avy-goto-char-2)
+         ("M-g w" . avy-goto-word-1)
+         ("M-g e" . avy-goto-word-0)))
+
 ;; Enhanced versions of common navigation and search commands.
 (use-package consult
   :bind (("C-s" . consult-line)

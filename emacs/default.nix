@@ -49,6 +49,7 @@ in
 
     extraPackages = epkgs: with epkgs; [
       agent-shell
+      avy
       cargo-mode
       consult
       corfu
