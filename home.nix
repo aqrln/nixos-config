@@ -124,6 +124,7 @@ in
 
   programs.git = {
     enable = true;
+    ignores = [ ".agent-shell/" ];
     signing = {
       key = signingKey;
       format = "ssh";
