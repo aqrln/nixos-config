@@ -271,7 +271,8 @@
 ;; Load these on first use; agent-shell will prompt for an available agent.
 (use-package agent-shell
   :commands agent-shell
-  :bind ("C-c x" . agent-shell-openai-start-codex))
+  :bind (("C-c a x" . agent-shell-openai-start-codex)
+         ("C-c a q" . agent-shell-prompt-queue)))
 
 ;; Open the full repository interfaces under a shared mnemonic prefix.
 (use-package magit
