@@ -153,7 +153,11 @@
 ;; Offer Cargo commands dynamically in Rust buffers.
 (use-package cargo-mode
   :hook
-  (rust-mode . cargo-minor-mode))
+  (rust-mode . cargo-minor-mode)
+  :config
+  (keymap-unset cargo-minor-mode-map "C-c a")
+  (keymap-set cargo-minor-mode-map "C-c C-a"
+              'cargo-mode-command-map))
 
 ;; Emacs does not yet include a native `fish-ts-mode'.  Keep fish-mode's
 ;; editing support while attaching the native Tree-sitter parser.
