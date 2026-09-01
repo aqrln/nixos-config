@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 let
   codex-acp = pkgs.buildNpmPackage rec {
@@ -47,51 +52,54 @@ in
 
     package = pkgs.emacs31-pgtk;
 
-    extraPackages = epkgs: with epkgs; [
-      agent-shell
-      avy
-      cargo-mode
-      consult
-      corfu
-      embark
-      embark-consult
-      envrc
-      expreg
-      fish-mode
-      ghostel
-      (trivialBuild {
-        pname = "kitty-graphics";
-        version = "1.1.0";
-        src = inputs.kitty-graphics;
-      })
-      marginalia
-      majutsu
-      nix-ts-mode
-      orderless
-      rust-mode
-      (treesit-grammars.with-grammars (grammars: with grammars; [
-        tree-sitter-bash
-        tree-sitter-c
-        tree-sitter-cpp
-        tree-sitter-css
-        tree-sitter-dockerfile
-        tree-sitter-fish
-        tree-sitter-html
-        tree-sitter-javascript
-        tree-sitter-json
-        tree-sitter-markdown
-        tree-sitter-markdown-inline
-        tree-sitter-nix
-        tree-sitter-python
-        tree-sitter-rust
-        tree-sitter-toml
-        tree-sitter-tsx
-        tree-sitter-typescript
-        tree-sitter-yaml
-      ]))
-      vc-jj
-      vertico
-    ];
+    extraPackages =
+      epkgs: with epkgs; [
+        agent-shell
+        avy
+        cargo-mode
+        consult
+        corfu
+        embark
+        embark-consult
+        envrc
+        expreg
+        fish-mode
+        ghostel
+        (trivialBuild {
+          pname = "kitty-graphics";
+          version = "1.1.0";
+          src = inputs.kitty-graphics;
+        })
+        marginalia
+        majutsu
+        nix-ts-mode
+        orderless
+        rust-mode
+        (treesit-grammars.with-grammars (
+          grammars: with grammars; [
+            tree-sitter-bash
+            tree-sitter-c
+            tree-sitter-cpp
+            tree-sitter-css
+            tree-sitter-dockerfile
+            tree-sitter-fish
+            tree-sitter-html
+            tree-sitter-javascript
+            tree-sitter-json
+            tree-sitter-markdown
+            tree-sitter-markdown-inline
+            tree-sitter-nix
+            tree-sitter-python
+            tree-sitter-rust
+            tree-sitter-toml
+            tree-sitter-tsx
+            tree-sitter-typescript
+            tree-sitter-yaml
+          ]
+        ))
+        vc-jj
+        vertico
+      ];
 
     extraConfig = builtins.readFile ./init.el;
   };
@@ -103,7 +111,10 @@ in
       enable = true;
       # Plasma also exports DISPLAY for XWayland.  Select the native Wayland
       # display explicitly instead of letting emacsclient fall back to :0.
-      arguments = [ "-c" "--display=wayland-0" ];
+      arguments = [
+        "-c"
+        "--display=wayland-0"
+      ];
     };
     # defaultEditor = true;
   };
