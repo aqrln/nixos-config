@@ -170,8 +170,31 @@
   :hook
   (fish-mode . my/fish-treesit-setup))
 
+;; While a nix buffer has parse errors, routine in mid-edit, the built-in
+;; indent rules anchor lines inside ERROR nodes at column 0.  Prepend a
+;; rule that keeps the previous non-blank line's indentation until the
+;; tree parses again.
+(defun my/nix-ts-tree-has-error-p (&rest _)
+  (treesit-node-check (treesit-buffer-root-node) 'has-error))
+
+(defun my/nix-ts-prev-line-indent-anchor (_node _parent bol &rest _)
+  (save-excursion
+    (goto-char bol)
+    (forward-line -1)
+    (while (and (not (bobp)) (looking-at-p "[ \t]*$"))
+      (forward-line -1))
+    (back-to-indentation)
+    (point)))
+
+(defun my/nix-ts-indent-error-fallback ()
+  (setf (alist-get 'nix treesit-simple-indent-rules)
+        (cons '(my/nix-ts-tree-has-error-p my/nix-ts-prev-line-indent-anchor 0)
+              (alist-get 'nix treesit-simple-indent-rules))))
+
 (use-package nix-ts-mode
-  :mode "\\.nix\\'")
+  :mode "\\.nix\\'"
+  :hook
+  (nix-ts-mode . my/nix-ts-indent-error-fallback))
 
 ;; Expand and contract the region along syntax-tree boundaries.
 (use-package expreg
