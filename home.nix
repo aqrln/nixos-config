@@ -105,6 +105,8 @@ in
 
   programs.fd.enable = true;
 
+  programs.fish.enable = true;
+
   programs.foot = {
     enable = true;
     settings = {
@@ -121,6 +123,11 @@ in
   };
 
   programs.gcc.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   programs.git = {
     enable = true;

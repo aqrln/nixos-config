@@ -330,5 +330,16 @@
 (use-package vc-jj
   :demand t)
 
+;; Apply each project's direnv environment buffer-locally, so Eglot,
+;; compilation commands, and other development tools see the project's
+;; own environment. Enabling the global mode last makes its hook run before
+;; mode hooks that read the environment when they start.
+(use-package envrc
+  :demand t
+  :bind (:map envrc-mode-map
+              ("C-c d" . envrc-command-map))
+  :config
+  (envrc-global-mode))
+
 (provide 'init)
 ;;; init.el ends here

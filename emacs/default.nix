@@ -55,6 +55,7 @@ in
       corfu
       embark
       embark-consult
+      envrc
       expreg
       fish-mode
       ghostel
