@@ -125,6 +125,7 @@ in
 
   home.packages = [
     codex-acp
+    pkgs.imagemagick
     pkgs.libsixel
   ];
 }
