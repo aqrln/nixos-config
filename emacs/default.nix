@@ -75,6 +75,7 @@ in
         nix-ts-mode
         orderless
         rust-mode
+        xclip
         (treesit-grammars.with-grammars (
           grammars: with grammars; [
             tree-sitter-bash

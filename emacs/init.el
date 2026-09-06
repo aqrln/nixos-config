@@ -73,6 +73,11 @@
 ;; Decode mouse reports in terminal frames.
 (xterm-mouse-mode 1)
 
+;; Share the Wayland clipboard with terminal frames via wl-copy/wl-paste.
+(use-package xclip
+  :config
+  (xclip-mode 1))
+
 ;; Restore inline images in terminal Emacs.  Foot is detected as a Sixel
 ;; terminal; `img2sixel' is installed alongside Emacs by Home Manager.
 (use-package kitty-graphics
