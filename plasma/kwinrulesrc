@@ -1,6 +1,15 @@
+[37808d72-d8e9-4381-a01b-e879d3fbac83]
+Description=Window settings for emacs
+desktopfile=/etc/profiles/per-user/aqrln/share/applications/emacsclient.desktop
+desktopfilerule=2
+types=1
+wmclass=emacs-31.1 emacs
+wmclasscomplete=true
+wmclassmatch=1
+
 [General]
-count=1
-rules=b7ee0241-6315-4e40-a70b-b4ef24ae5d8f
+count=2
+rules=37808d72-d8e9-4381-a01b-e879d3fbac83,b7ee0241-6315-4e40-a70b-b4ef24ae5d8f
 
 [b7ee0241-6315-4e40-a70b-b4ef24ae5d8f]
 Description=Application settings for foot
