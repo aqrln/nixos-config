@@ -39,6 +39,7 @@ let
     freecad
     kicad
     libreoffice-qt-stable
+    telegram-desktop
   ];
 
   audioPackages = with pkgs; [
