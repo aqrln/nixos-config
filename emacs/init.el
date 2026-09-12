@@ -7,47 +7,10 @@
 ;; Never turn `keyboard-quit' into an audible terminal BEL.
 (setq ring-bell-function #'ignore)
 
-;; The theme mirrors the semantic color choices in helix/selenized.nix.
-;; Its companion theme supplies palette-indexed faces to terminal frames.
-(add-to-list 'custom-theme-load-path
-             (expand-file-name "themes" user-emacs-directory))
-(load-theme 'selenized-dark t)
-(enable-theme 'selenized-terminal)
+;; Use Solarized's Selenized palette and upstream face definitions.
+(load-theme 'solarized-selenized-dark t)
 
-(defconst my/terminal-ansi-color-names
-  ["black" "red" "green" "yellow" "blue" "magenta" "cyan" "white"
-   "brightblack" "brightred" "brightgreen" "brightyellow"
-   "brightblue" "brightmagenta" "brightcyan" "brightwhite"])
-
-(defun my/setup-terminal-palette (frame)
-  "Make FRAME use the terminal's default and sixteen ANSI colors."
-  (unless (display-graphic-p frame)
-    (with-selected-frame frame
-      ;; Register these after terminal initialization, which replaces the
-      ;; daemon's initial `dumb' terminal color table.  Unlike Emacs' named
-      ;; aliases, each name below always denotes the corresponding ANSI slot.
-      (dotimes (index 16)
-        (let* ((standard-name
-                (aref my/terminal-ansi-color-names index))
-               (description (tty-color-desc standard-name))
-               (rgb (nthcdr 2 description)))
-          ;; Keep canonical RGB metadata so packages such as Ghostel can
-          ;; construct a palette.  The explicit INDEX still makes terminal
-          ;; redisplay emit ANSI colors rather than these RGB values.
-          (tty-color-define (format "color-%d" index) index rgb frame)))
-
-      ;; Re-resolve theme faces now that the indexed names exist for this
-      ;; terminal, then undo RGB defaults inherited from graphical frames.
-      (dolist (setting (get 'selenized-terminal 'theme-settings))
-        (when (eq (car setting) 'theme-face)
-          (face-spec-recalc (nth 1 setting) frame)))
-      (set-face-attribute 'default frame
-                          :foreground "unspecified-fg"
-                          :background "unspecified-bg"))))
-
-(add-hook 'after-make-frame-functions #'my/setup-terminal-palette)
-(unless (daemonp)
-  (my/setup-terminal-palette (selected-frame)))
+(setq solarized-scale-markdown-headlines t)
 
 ;; Frame appearance.  Keep the complete Fontconfig pattern in
 ;; `default-frame-alist' because graphical frames may be created later by the
@@ -63,6 +26,8 @@
 (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
 (add-to-list 'default-frame-alist `(font . ,my/default-font))
 (set-face-attribute 'default nil :font my/default-font)
+
+(setq x-underline-at-descent-line t)
 
 ;; Insert matching delimiters and quotes while editing.
 (electric-pair-mode 1)

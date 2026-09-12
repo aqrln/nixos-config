@@ -45,8 +45,6 @@ let
   };
 in
 {
-  home.file.".emacs.d/themes/selenized-dark-theme.el".source = ./selenized-dark-theme.el;
-
   programs.emacs = {
     enable = true;
 
@@ -75,6 +73,7 @@ in
         nix-ts-mode
         orderless
         rust-mode
+        solarized-theme
         xclip
         (treesit-grammars.with-grammars (
           grammars: with grammars; [
@@ -124,7 +123,10 @@ in
 
   # A PGTK build running through GTK's X11 backend is unsupported.  Refuse
   # that fallback in the daemon as well as selecting Wayland in the client.
-  systemd.user.services.emacs.Service.Environment = [ "GDK_BACKEND=wayland" ];
+  systemd.user.services.emacs.Service.Environment = [
+    "GDK_BACKEND=wayland"
+    "COLORTERM=truecolor"
+  ];
 
   home.packages = [
     codex-acp
