@@ -340,6 +340,41 @@
 (use-package vc-jj
   :demand t)
 
+;; Fastmail credentials are read by auth-source, outside the Nix store.
+;; See ~/lore/fastmail-gnus.org for app-password setup and first-run instructions.
+(defconst my/fastmail-user "alex@aqrln.net"
+  "Fastmail sign-in address, which may differ from the sender address.")
+
+(setq user-full-name "Oleksii Orlenko"
+      user-mail-address "alex@aqrln.net"
+      mail-user-agent 'gnus-user-agent
+      send-mail-function #'smtpmail-send-it
+      message-send-mail-function #'smtpmail-send-it)
+
+(use-package smtpmail
+  :commands smtpmail-send-it
+  :custom
+  (smtpmail-smtp-server "smtp.fastmail.com")
+  (smtpmail-smtp-service 465)
+  (smtpmail-stream-type 'tls)
+  (smtpmail-smtp-user my/fastmail-user))
+
+(use-package gnus
+  :commands gnus
+  :custom
+  (gnus-select-method
+   `(nnimap "fastmail"
+            (nnimap-address "imap.fastmail.com")
+            (nnimap-server-port 993)
+            (nnimap-stream tls)
+            (nnimap-user ,my/fastmail-user)))
+  (gnus-nntp-server nil)
+  ;; Store sent mail on Fastmail, including messages composed with C-x m.
+  (gnus-message-archive-method '(nnimap "fastmail"))
+  (gnus-message-archive-group "Sent")
+  (gnus-gcc-mark-as-read t)
+  (gnus-permanently-visible-groups "\\`\\(?:nnimap\\+fastmail:\\)?INBOX\\'"))
+
 ;; Apply each project's direnv environment buffer-locally, so Eglot,
 ;; compilation commands, and other development tools see the project's
 ;; own environment. Enabling the global mode last makes its hook run before

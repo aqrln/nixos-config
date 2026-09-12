@@ -189,6 +189,13 @@ in
     vaults.lore.target = "lore";
   };
 
+  programs.gpg.enable = true;
+
+  services.gpg-agent = {
+    enable = true;
+    pinentry.package = pkgs.pinentry-qt;
+  };
+
   services.fluidsynth = {
     enable = true;
     soundService = "pipewire-pulse";

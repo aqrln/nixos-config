@@ -107,6 +107,8 @@ in
 
   services.emacs = {
     enable = true;
+    # Plasma imports the display environment before starting this target.
+    startWithUserSession = "graphical";
     package = config.programs.emacs.finalPackage;
     client = {
       enable = true;
