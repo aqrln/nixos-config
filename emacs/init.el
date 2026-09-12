@@ -73,6 +73,11 @@
 ;; Decode mouse reports in terminal frames.
 (xterm-mouse-mode 1)
 
+;; Don't follow symlinks when opening files, treat the symlink as if
+;; it's the original file.
+(setq find-file-visit-truename nil
+      vc-follow-symlinks nil)
+
 ;; Share the Wayland clipboard with terminal frames via wl-copy/wl-paste.
 (use-package xclip
   :config
