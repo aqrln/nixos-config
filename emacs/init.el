@@ -283,10 +283,34 @@
   :config
   (global-corfu-mode))
 
+;; Let commands in Emacs shells open files in this Emacs instance.
+(use-package with-editor
+  :demand t
+  :config
+  (defun my/export-emacs-editor (&optional process)
+    "Export both editor variables in a supported shell or terminal buffer."
+    (with-editor-export-editor "EDITOR" process)
+    (with-editor-export-editor "VISUAL" process))
+
+  (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook
+                 vterm-mode-hook eat-exec-hook))
+    (add-hook hook #'my/export-emacs-editor))
+
+  (defun my/ghostel-set-editor ()
+    "Set editor variables in Ghostel's dynamically bound spawn environment."
+    ;; With-Editor's terminal export command does not support Ghostel yet.
+    ;; Remote Ghostel terminals cannot use the local Emacsclient socket.
+    (unless (file-remote-p default-directory)
+      (setq process-environment
+            (with-editor
+              (setenv "VISUAL" (getenv "EDITOR"))
+              process-environment)))))
+
 ;; A fast, libghostty-backed project terminal using Fish.  With a prefix
 ;; argument, `ghostel-project' creates another terminal for the same project.
 (use-package ghostel
   :commands (ghostel ghostel-project)
+  :hook (ghostel-pre-spawn . my/ghostel-set-editor)
   :bind ("C-c t" . ghostel-project))
 
 ;; Load these on first use; agent-shell will prompt for an available agent.

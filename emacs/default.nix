@@ -99,6 +99,7 @@ in
         ))
         vc-jj
         vertico
+        with-editor
       ];
 
     extraConfig = builtins.readFile ./init.el;
