@@ -36,7 +36,7 @@ let
   ];
 
   desktopApps = with pkgs; [
-    freecad
+    # freecad
     kicad
     libreoffice-qt-stable
     telegram-desktop
