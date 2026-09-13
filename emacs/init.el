@@ -7,6 +7,18 @@
 ;; Never turn `keyboard-quit' into an audible terminal BEL.
 (setq ring-bell-function #'ignore)
 
+;; Match single-spaced prose by default when moving and filling sentences.
+(setq-default sentence-end-double-space nil)
+
+(defun my/use-double-space-sentences ()
+  "Use the two-space sentence convention in the current buffer."
+  (setq-local sentence-end-double-space t))
+
+;; Preserve the Emacs Lisp convention, including in *scratch*, and use it
+;; for Org notes as well.  Project-local settings can override these hooks.
+(dolist (hook '(emacs-lisp-mode-hook lisp-interaction-mode-hook org-mode-hook))
+  (add-hook hook #'my/use-double-space-sentences))
+
 ;; Use Solarized's Selenized palette and upstream face definitions.
 (load-theme 'solarized-selenized-dark t)
 
