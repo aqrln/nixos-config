@@ -316,17 +316,17 @@
 ;; Load these on first use; agent-shell will prompt for an available agent.
 (use-package agent-shell
   :commands agent-shell
-  :custom
-  ;; kitty-graphics's agent-shell integration only hooks this overlay
-  ;; renderer, so terminal frames need it for inline images.
-  ;; TODO: drop this once kitty-graphics supports the default in-place
-  ;; renderer (`agent-shell-markdown-replace-markup').
-  (agent-shell-markdown-render-function #'agent-shell--markdown-overlays-put)
   :bind (("C-c a x" . agent-shell-openai-start-codex)
          ("C-c a q" . agent-shell-prompt-queue)
 	 ("C-c a s" . agent-shell-send-dwim)
          :map agent-shell-mode-map
          ("C-c a u" . agent-shell-copy-link-url-at-point)))
+
+;; Keep the native streaming renderer and reuse terminal image placements.
+(use-package agent-shell-kitty-graphics
+  :after (agent-shell kitty-graphics)
+  :config
+  (agent-shell-kitty-graphics-mode 1))
 
 ;; Open the full repository interfaces under a shared mnemonic prefix.
 (use-package magit

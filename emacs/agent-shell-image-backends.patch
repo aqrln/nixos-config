@@ -1,0 +1,122 @@
+--- a/agent-shell-markdown.el
++++ b/agent-shell-markdown.el
+@@ -1154,6 +1154,37 @@
+         (goto-char pos)
+         (looking-at-p "{[^}\n]*\\'"))))
+
++(defvar agent-shell-markdown-image-display-p-functions nil
++  "Functions that report support for images outside graphical frames.
++Each function is called without arguments.  A non-nil return enables
++image properties; the backend is responsible for displaying them.")
++
++(defvar agent-shell-markdown-image-update-functions nil
++  "Functions called with START, END and IMAGE after an image is installed.
++IMAGE is the native image specification stored in the `display' property.
++Backends can mirror that property without changing Markdown parsing.")
++
++(defun agent-shell-markdown--image-display-p ()
++  "Return non-nil when native or external image display is available."
++  (or (display-graphic-p)
++      (run-hook-with-args-until-success
++       'agent-shell-markdown-image-display-p-functions)))
++
++(defun agent-shell-markdown--put-image (start end image)
++  "Install IMAGE on START through END and notify display backends."
++  (when (display-graphic-p)
++    (image-flush image))
++  (add-text-properties start end
++                       (list 'display image 'agent-shell-markdown-image t))
++  (run-hook-with-args 'agent-shell-markdown-image-update-functions
++                      start end image))
++
++(defun agent-shell-markdown--window-pixels (window dimension)
++  "Return WINDOW's body size in pixels along DIMENSION."
++  (if (eq dimension 'width)
++      (window-body-width window t)
++    (window-body-height window t)))
++
+ (cl-defun agent-shell-markdown--replace-images (&key avoid-ranges image-cache-directory complete)
+   "Replace `![alt](url)' image markup with displayed images.
+
+@@ -1266,13 +1297,12 @@
+             (cond
+              ((and path
+                    (image-supported-file-p path)
+-                   (display-graphic-p))
++                   (agent-shell-markdown--image-display-p))
+               (let ((image (create-image
+                             path nil nil
+                             :max-width (or (map-elt attributes :max-width)
+                                            (agent-shell-markdown--image-max-width))
+                             :max-height (map-elt attributes :max-height))))
+-                (image-flush image)
+                 (delete-region markup-start content-end)
+                 (goto-char markup-start)
+                 (insert placeholder)
+@@ -1281,7 +1311,7 @@
+                                       (agent-shell-markdown-visit-file :file path)))
+                        (image-keymap (agent-shell-markdown--make-ret-binding-map
+                                       open-action)))
+-                  (put-text-property markup-start end 'display image)
++                  (agent-shell-markdown--put-image markup-start end image)
+                   (put-text-property markup-start end 'keymap image-keymap)
+                   ;; Nothing about a displayed image says it's actionable, so
+                   ;; echo what its keys do as the cursor enters.
+@@ -1362,7 +1392,7 @@
+                  (resolved (agent-shell-markdown--resolve-image-url raw)))
+             (when (and resolved
+                        (image-supported-file-p resolved)
+-                       (display-graphic-p))
++                       (agent-shell-markdown--image-display-p))
+               (let* ((image (create-image
+                              resolved nil nil
+                              :max-width (agent-shell-markdown--image-max-width)))
+@@ -1370,8 +1400,7 @@
+                                     (agent-shell-markdown-visit-file :file resolved)))
+                      (image-keymap (agent-shell-markdown--make-ret-binding-map
+                                     open-action)))
+-                (image-flush image)
+-                (put-text-property path-start path-end 'display image)
++                (agent-shell-markdown--put-image path-start path-end image)
+                 (put-text-property path-start path-end 'keymap image-keymap)
+                 ;; Nothing about a displayed image says it's actionable, so
+                 ;; echo what its keys do as the cursor enters.
+@@ -3217,7 +3246,7 @@
+ Nil when the buffer is displayed in no window, so a caller can treat
+ that as \"size unknown\" and re-measure once it is shown."
+   (when-let* ((window (get-buffer-window (current-buffer) t)))
+-    (window-body-width window t)))
++    (agent-shell-markdown--window-pixels window 'width)))
+
+ (defun agent-shell-markdown--resize-image (start end max-width window-width)
+   "Re-size the image on [START, END) to MAX-WIDTH pixels.
+@@ -3237,8 +3266,7 @@
+                           file nil nil
+                           :max-width max-width
+                           :max-height (image-property image :max-height))))
+-      (image-flush resized)
+-      (put-text-property start end 'display resized))
++      (agent-shell-markdown--put-image start end resized))
+     (put-text-property start end
+                        'agent-shell-markdown-image-window-width window-width)))
+
+@@ -4734,7 +4762,7 @@
+       (let ((window (or (get-buffer-window (current-buffer) t)
+                         (frame-first-window))))
+         (round (* agent-shell-markdown-image-max-width
+-                  (window-body-width window t))))
++                  (agent-shell-markdown--window-pixels window 'width))))
+     agent-shell-markdown-image-max-width))
+
+ (defun agent-shell-markdown--image-attribute-pixels (value dimension)
+@@ -4754,9 +4782,7 @@
+                           (frame-first-window))))
+     (if (equal (match-string 2 value) "%")
+         (round (* (/ number 100.0)
+-                  (if (eq dimension 'width)
+-                      (window-body-width window t)
+-                    (window-body-height window t))))
++                  (agent-shell-markdown--window-pixels window dimension)))
+       number)))
+
+ (defun agent-shell-markdown--image-attribute-ratio (value)

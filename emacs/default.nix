@@ -63,6 +63,15 @@ in
       with epkgs;
       [
         agent-shell
+        (trivialBuild {
+          pname = "agent-shell-kitty-graphics";
+          version = "0.1.0";
+          src = ./agent-shell-kitty-graphics.el;
+          packageRequires = [
+            agent-shell
+            kitty-graphics
+          ];
+        })
         avy
         cargo-mode
         consult
