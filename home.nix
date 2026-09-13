@@ -64,6 +64,31 @@ in
   home.packages =
     kdePackages ++ devToolsPackages ++ lspPackages ++ desktopApps ++ audioPackages ++ miscPackages;
 
+  fonts.fontconfig = {
+    enable = true;
+    antialiasing = true;
+    hinting = "slight";
+    subpixelRendering = "rgb";
+
+    configFile.fantasque-ttf = {
+      enable = true;
+      priority = 60;
+      text = ''
+        <?xml version="1.0"?>
+        <fontconfig>
+          <match target="pattern">
+            <test name="family" compare="eq">
+              <string>Fantasque Sans Mono</string>
+            </test>
+            <edit name="fontformat" mode="assign" binding="strong">
+              <string>TrueType</string>
+            </edit>
+          </match>
+        </fontconfig>
+      '';
+    };
+  };
+
   xdg.configFile = {
     "konsolerc".source = fromRepo "konsole/konsolerc";
     "kwinrulesrc".source = fromRepo "plasma/kwinrulesrc";
