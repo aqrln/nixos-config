@@ -33,6 +33,24 @@ in
 
     package = pkgs.emacs31-pgtk;
 
+    overrides = final: prev: {
+      # Keep Markdown parsing upstream; expose image display to terminal backends.
+      agent-shell = prev.agent-shell.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./agent-shell-image-backends.patch ];
+      });
+      # Majutsu is manually packaged, so emacs-overlay does not refresh it.
+      majutsu = prev.majutsu.overrideAttrs (old: {
+        version = "0.6.0-unstable-2026-09-11";
+        src = pkgs.fetchFromGitHub {
+          owner = "0WD0";
+          repo = "majutsu";
+          rev = "56b6e263cd4ecaf8e44e955647bffafe56f54f34";
+          hash = "sha256-pMNImWrUKE6CV57Euy/ce1QtomxeWqenBllldPU1WFI=";
+        };
+        packageRequires = old.packageRequires ++ [ final.compat ];
+      });
+    };
+
     extraPackages =
       epkgs:
       let
