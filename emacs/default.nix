@@ -51,7 +51,16 @@ in
     package = pkgs.emacs31-pgtk;
 
     extraPackages =
-      epkgs: with epkgs; [
+      epkgs:
+      let
+        kitty-graphics = epkgs.trivialBuild {
+          pname = "kitty-graphics";
+          version = "1.4.0";
+          src = inputs.kitty-graphics;
+        };
+      in
+      with epkgs;
+      [
         agent-shell
         avy
         cargo-mode
@@ -63,11 +72,7 @@ in
         expreg
         fish-mode
         ghostel
-        (trivialBuild {
-          pname = "kitty-graphics";
-          version = "1.1.0";
-          src = inputs.kitty-graphics;
-        })
+        kitty-graphics
         marginalia
         majutsu
         nix-ts-mode

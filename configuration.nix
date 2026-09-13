@@ -13,6 +13,9 @@
     ./snapper.nix
   ];
 
+  # Refresh Emacs package archives independently of the Emacs executable.
+  nixpkgs.overlays = [ inputs.emacs-overlay.overlays.package ];
+
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.lanzaboote = {

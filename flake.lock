@@ -36,6 +36,29 @@
         "type": "github"
       }
     },
+    "emacs-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-stable": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789308014,
+        "narHash": "sha256-EzNY4SpIQe0dWI5fe3tuNSHrGMaAzXEhi5nAJUW2l3w=",
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "rev": "b14e06b3ca1c801e8ce33a181c3da1f9c7b3107c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "emacs-overlay",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -172,6 +195,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
         "kitty-graphics": "kitty-graphics",
         "lanzaboote": "lanzaboote",
