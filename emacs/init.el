@@ -324,6 +324,7 @@
   (agent-shell-markdown-render-function #'agent-shell--markdown-overlays-put)
   :bind (("C-c a x" . agent-shell-openai-start-codex)
          ("C-c a q" . agent-shell-prompt-queue)
+	 ("C-c a s" . agent-shell-send-dwim)
          :map agent-shell-mode-map
          ("C-c a u" . agent-shell-copy-link-url-at-point)))
 
