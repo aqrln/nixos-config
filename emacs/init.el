@@ -31,7 +31,7 @@
 (scroll-bar-mode -1)
 
 (defconst my/default-font
-  "Fantasque Sans Mono:pixelsize=15")
+  "Fantasque Sans Mono:pixelsize=16")
 
 (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
