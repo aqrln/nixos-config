@@ -49,6 +49,7 @@ let
   ];
 
   miscPackages = with pkgs; [
+    file
     papirus-icon-theme
   ];
 
