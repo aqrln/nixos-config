@@ -6,43 +6,26 @@
 }:
 
 let
-  codex-acp = pkgs.buildNpmPackage rec {
-    pname = "agentclientprotocol-codex-acp";
-    version = "1.10.0";
+  # Drop this override once nixpkgs includes Codex ACP 1.11.0 or newer.
+  codex-acp = pkgs.codex-acp.overrideAttrs (
+    finalAttrs: _oldAttrs: {
+      version = "1.11.0";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "agentclientprotocol";
-      repo = "codex-acp";
-      rev = "v${version}";
-      hash = "sha256-D8uYd30NRXQYUSBFCi66Oq0iRZXpl8P7nWv2m3+KBig=";
-    };
+      src = pkgs.fetchFromGitHub {
+        owner = "agentclientprotocol";
+        repo = "codex-acp";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-u3uYZnMVJHGF9IWlXdIAdHWPiGC3ENFIEAaU4Nv0l7M=";
+      };
 
-    npmDepsHash = "sha256-df1/kPiZFBEq9Um26Qbo9XaYj2J8BOXQmunCQWquDTo=";
-
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    installPhase = ''
-      runHook preInstall
-
-      package_dir=$out/lib/node_modules/@agentclientprotocol/codex-acp
-      mkdir -p "$package_dir" "$out/bin"
-
-      cp -r dist node_modules package.json README.md LICENSE "$package_dir"
-
-      makeWrapper ${pkgs.nodejs}/bin/node "$out/bin/codex-acp" \
-        --add-flags "$package_dir/dist/index.js" \
-        --set-default CODEX_PATH ${pkgs.codex}/bin/codex
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "ACP server that exposes Codex CLI functionality";
-      homepage = "https://github.com/agentclientprotocol/codex-acp";
-      license = pkgs.lib.licenses.asl20;
-      mainProgram = "codex-acp";
-    };
-  };
+      npmDepsHash = "sha256-MpBjRpOrOE7mGAAZEe1jwxR0XLf7IXsdWhtkAhuREaM=";
+      npmDeps = pkgs.fetchNpmDeps {
+        name = "codex-acp-${finalAttrs.version}-npm-deps";
+        inherit (finalAttrs) src;
+        hash = finalAttrs.npmDepsHash;
+      };
+    }
+  );
 in
 {
   programs.emacs = {
