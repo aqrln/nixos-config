@@ -157,6 +157,12 @@
   :hook
   (fish-mode . my/fish-treesit-setup))
 
+;; Edit scores and compile them with LilyPond; open PDFs in the desktop viewer.
+(use-package lilypond-mode
+  :mode ("\\.ly\\'" "\\.ily\\'")
+  :custom
+  (lilypond-pdf-command "xdg-open"))
+
 ;; While a nix buffer has parse errors, routine in mid-edit, the built-in
 ;; indent rules anchor lines inside ERROR nodes at column 0.  Prepend a
 ;; rule that keeps the previous non-blank line's indentation until the

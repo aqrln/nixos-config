@@ -44,6 +44,7 @@ let
 
   audioPackages = with pkgs; [
     kmetronome
+    lilypond
     lingot
     qpwgraph
   ];

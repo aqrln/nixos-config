@@ -6,6 +6,21 @@
 }:
 
 let
+  lilypond-mode = pkgs.runCommand "lilypond-mode-${pkgs.lilypond.version}" { } ''
+    mkdir -p "$out/share/emacs/site-lisp"
+    cp ${pkgs.lilypond}/share/emacs/site-lisp/*.el "$out/share/emacs/site-lisp/"
+    chmod u+w "$out/share/emacs/site-lisp/"*.el
+
+    # Preserve dynamic binding while satisfying Emacs 31's explicit-cookie
+    # requirement. lilypond-words.el is completion data, not Lisp code.
+    for file in "$out/share/emacs/site-lisp/"*.el; do
+      case "$file" in */lilypond-words.el) continue ;; esac
+      if ! head -n 1 "$file" | grep -q 'lexical-binding:'; then
+        sed -i '1s/$/ -*- lexical-binding: nil; -*-/' "$file"
+      fi
+    done
+  '';
+
   # Drop this override once nixpkgs includes Codex ACP 1.11.0 or newer.
   codex-acp = pkgs.codex-acp.overrideAttrs (
     finalAttrs: _oldAttrs: {
@@ -83,6 +98,7 @@ in
         fish-mode
         ghostel
         kitty-graphics
+        lilypond-mode
         marginalia
         majutsu
         nix-ts-mode
@@ -117,7 +133,10 @@ in
         with-editor
       ];
 
-    extraConfig = builtins.readFile ./init.el;
+    extraConfig = ''
+      ;; Prefer the patched mode over LilyPond's copy in the user profile.
+      (add-to-list 'load-path "${lilypond-mode}/share/emacs/site-lisp")
+    '' + builtins.readFile ./init.el;
   };
 
   services.emacs = {
