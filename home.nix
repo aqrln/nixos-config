@@ -43,6 +43,7 @@ let
   ];
 
   audioPackages = with pkgs; [
+    fluidsynth
     kmetronome
     lilypond
     lingot
@@ -227,4 +228,9 @@ in
     enable = true;
     soundService = "pipewire-pulse";
   };
+
+  home.file.".fluidsynth".text = ''
+    set audio.driver pulseaudio
+    set synth.default-soundfont ${config.services.fluidsynth.soundFont}
+  '';
 }
