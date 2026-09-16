@@ -97,6 +97,8 @@ in
         expreg
         fish-mode
         ghostel
+        gptel
+        gptel-agent
         kitty-graphics
         lilypond-mode
         marginalia
@@ -167,5 +169,6 @@ in
     codex-acp
     pkgs.imagemagick
     pkgs.libsixel
+    pkgs.tree # gptel-agent's Glob tool
   ];
 }

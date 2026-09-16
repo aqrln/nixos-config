@@ -320,6 +320,72 @@
   :hook (ghostel-pre-spawn . my/ghostel-set-editor)
   :bind ("C-c t" . ghostel-project))
 
+;; Use the ChatGPT subscription via browser OAuth; gptel manages its token cache.
+(use-package gptel
+  :commands (gptel gptel-openai-oauth-login)
+  :bind (("C-c a g" . gptel)
+         ("C-c a RET" . gptel-send)
+         ("C-c a m" . gptel-menu))
+  :config
+  (require 'gptel-openai-oauth)
+  ;; Echo-area and kill-ring output request a complete response, but the
+  ;; subscription endpoint requires streaming.  Buffer it for those callbacks.
+  ;; https://github.com/karthink/gptel/issues/1432
+  (defun my/gptel-oauth-buffered-request (request prompt &rest args)
+    "Stream OAuth REQUEST with PROMPT and ARGS for buffered callbacks."
+    (let ((callback (plist-get args :callback)))
+      (if (not (and (gptel-openai-oauth-p gptel-backend)
+                    callback (not (plist-get args :stream))))
+          (apply request prompt args)
+        (let ((gptel-stream t)
+              (gptel-use-curl t)
+              chunks reasoning)
+          (setq args (plist-put args :stream t))
+          (setq args
+                (plist-put
+                 args :callback
+                 (lambda (response info)
+                   (pcase response
+                     ((pred stringp) (push response chunks))
+                     (`(reasoning . ,(and text (pred stringp)))
+                      (push text reasoning))
+                     (`(reasoning . t) nil)
+                     ('t
+                      (when reasoning
+                        (funcall callback
+                                 (cons 'reasoning (apply #'concat (nreverse reasoning)))
+                                 info)
+                        (setq reasoning nil))
+                      (when chunks
+                        (let ((text (apply #'concat (nreverse chunks))))
+                          (setq chunks nil)
+                          (funcall callback text info))))
+                     (_ (setq chunks nil reasoning nil)
+                        (funcall callback response info))))))
+          (apply request prompt args)))))
+  (advice-add 'gptel-request :around #'my/gptel-oauth-buffered-request)
+  (setq gptel-model 'gpt-6-astra
+        gptel-backend (gptel-make-openai-oauth "ChatGPT" :stream t)))
+
+;; Register coding tools and agent/planning presets when gptel loads.
+(use-package gptel-agent
+  :after gptel
+  :demand t
+  :bind ("C-c a a" . gptel-agent)
+  :config
+  ;; Tool inspection closes its buffer after accepting a call.  Keep subagent
+  ;; requests and their status overlays in the originating conversation.
+  (defun my/gptel-agent-task-in-request-buffer (task &rest args)
+    "Run TASK with ARGS in the parent request's buffer."
+    (let ((buffer (and (bound-and-true-p gptel--fsm-last)
+                       (plist-get (gptel-fsm-info gptel--fsm-last) :buffer))))
+      (if (buffer-live-p buffer)
+          (with-current-buffer buffer
+            (apply task args))
+        (apply task args))))
+  (advice-add 'gptel-agent--task :around #'my/gptel-agent-task-in-request-buffer)
+  (gptel-agent-update))
+
 ;; Load these on first use; agent-shell will prompt for an available agent.
 (use-package agent-shell
   :commands agent-shell
