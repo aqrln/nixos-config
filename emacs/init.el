@@ -258,6 +258,7 @@
 (use-package consult
   :bind (("C-s" . consult-line)
          ("C-x b" . consult-buffer)
+         ("M-g f" . consult-flymake)
          ("M-g g" . consult-goto-line)
          ("M-g i" . consult-imenu)
          ("M-y" . consult-yank-pop)))
