@@ -256,11 +256,11 @@
 
 ;; Enhanced versions of common navigation and search commands.
 (use-package consult
-  :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
+  :bind (("C-x b" . consult-buffer)
          ("M-g f" . consult-flymake)
          ("M-g g" . consult-goto-line)
          ("M-g i" . consult-imenu)
+         ("M-g l" . consult-line)
          ("M-y" . consult-yank-pop)))
 
 ;; Context-sensitive actions for the current completion candidate.
