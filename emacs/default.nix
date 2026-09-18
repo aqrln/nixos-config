@@ -21,34 +21,15 @@ let
     done
   '';
 
-  # Drop the version override once nixpkgs includes Codex ACP 1.11.0 or newer.
   # Keep the patch until ACP also recognizes the "priority" service tier.
-  codex-acp = pkgs.codex-acp.overrideAttrs (
-    finalAttrs: old: {
-      version = "1.11.0";
-
-      src = pkgs.fetchFromGitHub {
-        owner = "agentclientprotocol";
-        repo = "codex-acp";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-u3uYZnMVJHGF9IWlXdIAdHWPiGC3ENFIEAaU4Nv0l7M=";
-      };
-
-      npmDepsHash = "sha256-MpBjRpOrOE7mGAAZEe1jwxR0XLf7IXsdWhtkAhuREaM=";
-      npmDeps = pkgs.fetchNpmDeps {
-        name = "codex-acp-${finalAttrs.version}-npm-deps";
-        inherit (finalAttrs) src;
-        hash = finalAttrs.npmDepsHash;
-      };
-
-      postPatch = (old.postPatch or "") + ''
-        substituteInPlace src/CodexAcpServer.ts \
-          --replace-fail \
-            'sessionMetadata.currentServiceTier === "fast"' \
-          '["fast", "priority"].includes(sessionMetadata.currentServiceTier ?? "")'
-      '';
-    }
-  );
+  codex-acp = pkgs.codex-acp.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace src/CodexAcpServer.ts \
+        --replace-fail \
+          'sessionMetadata.currentServiceTier === "fast"' \
+        '["fast", "priority"].includes(sessionMetadata.currentServiceTier ?? "")'
+    '';
+  });
 in
 {
   programs.emacs = {
