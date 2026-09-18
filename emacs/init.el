@@ -129,6 +129,10 @@
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
 
+;; Emacs ships markdown-ts-mode without an autoload or a file association.
+(use-package markdown-ts-mode
+  :mode "\\.\\(?:md\\|markdown\\)\\'")
+
 ;; Retain rust-mode's Cargo, Clippy, and rustfmt integration while deriving
 ;; its syntax support from Emacs' native Tree-sitter mode.
 (use-package rust-mode
