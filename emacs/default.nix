@@ -21,9 +21,10 @@ let
     done
   '';
 
-  # Drop this override once nixpkgs includes Codex ACP 1.11.0 or newer.
+  # Drop the version override once nixpkgs includes Codex ACP 1.11.0 or newer.
+  # Keep the patch until ACP also recognizes the "priority" service tier.
   codex-acp = pkgs.codex-acp.overrideAttrs (
-    finalAttrs: _oldAttrs: {
+    finalAttrs: old: {
       version = "1.11.0";
 
       src = pkgs.fetchFromGitHub {
@@ -39,6 +40,13 @@ let
         inherit (finalAttrs) src;
         hash = finalAttrs.npmDepsHash;
       };
+
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace src/CodexAcpServer.ts \
+          --replace-fail \
+            'sessionMetadata.currentServiceTier === "fast"' \
+          '["fast", "priority"].includes(sessionMetadata.currentServiceTier ?? "")'
+      '';
     }
   );
 in
