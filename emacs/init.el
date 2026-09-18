@@ -430,6 +430,10 @@
   :commands (majutsu majutsu-log)
   :bind ("C-c m j" . majutsu))
 
+;; Show only commit summaries in Majutsu buffers; TAB expands a body.
+(with-eval-after-load 'magit-section
+  (add-to-list 'magit-section-initial-visibility-alist '(jj-commit . hide)))
+
 ;; Register Jujutsu support with Emacs' built-in VC interface.
 (use-package vc-jj
   :demand t)
