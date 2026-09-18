@@ -202,8 +202,8 @@
 
 ;; Expand and contract the region along syntax-tree boundaries.
 (use-package expreg
-  :bind (("C-c r e" . expreg-expand)
-         ("C-c r c" . expreg-contract)))
+  :bind (("C->" . expreg-expand)
+         ("C-<" . expreg-contract)))
 
 ;; Start the installed Nix, Rust, and TOML language servers automatically.
 (defun my/eglot-disable-inlay-hints ()
