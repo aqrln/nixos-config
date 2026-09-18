@@ -160,10 +160,13 @@ in
 
   # A PGTK build running through GTK's X11 backend is unsupported.  Refuse
   # that fallback in the daemon as well as selecting Wayland in the client.
-  systemd.user.services.emacs.Service.Environment = [
-    "GDK_BACKEND=wayland"
-    "COLORTERM=truecolor"
-  ];
+  systemd.user.services.emacs.Service = {
+    Environment = [
+      "GDK_BACKEND=wayland"
+      "COLORTERM=truecolor"
+    ];
+    OOMPolicy = "continue";
+  };
 
   home.packages = [
     codex-acp
