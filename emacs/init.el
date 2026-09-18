@@ -134,6 +134,12 @@
 (use-package markdown-ts-mode
   :mode "\\.\\(?:md\\|markdown\\)\\'")
 
+(use-package org
+  :custom
+  (org-fontify-todo-headline t)
+  :custom-face
+  (org-headline-todo ((t (:inherit org-todo)))))
+
 ;; Retain rust-mode's Cargo, Clippy, and rustfmt integration while deriving
 ;; its syntax support from Emacs' native Tree-sitter mode.
 (use-package rust-mode
