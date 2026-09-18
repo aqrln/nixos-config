@@ -135,7 +135,7 @@
   :init
   (setq rust-mode-treesitter-derive t)
   :custom
-  (rust-format-on-save t))
+  (rust-format-on-save nil))
 
 ;; Offer Cargo commands dynamically in Rust buffers.
 (use-package cargo-mode
@@ -200,6 +200,13 @@
   (when (eglot-managed-p)
     (eglot-inlay-hints-mode -1)))
 
+(defun my/eglot-rust-format-on-save ()
+  "Format managed Rust buffers with Eglot before saving."
+  (when (derived-mode-p 'rust-mode 'rust-ts-mode)
+    (if (eglot-managed-p)
+        (add-hook 'before-save-hook #'eglot-format-buffer nil t)
+      (remove-hook 'before-save-hook #'eglot-format-buffer t))))
+
 (use-package eglot
   :init
   (setq eglot-autoshutdown t)
@@ -210,6 +217,7 @@
   :hook
   ((nix-ts-mode rust-mode toml-ts-mode) . eglot-ensure)
   (eglot-managed-mode . my/eglot-disable-inlay-hints)
+  (eglot-managed-mode . my/eglot-rust-format-on-save)
   :bind
   (:map eglot-mode-map
         ("C-c e a" . eglot-code-actions)
