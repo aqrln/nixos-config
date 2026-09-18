@@ -126,8 +126,9 @@
         (add-to-list 'major-mode-remap-alist
                      (cons old-mode new-mode)))))
 
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode)))
+  (add-to-list 'auto-mode-alist '("\\.[mc]?ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.[mc]js\\'" . js-ts-mode)))
 
 ;; Emacs ships markdown-ts-mode without an autoload or a file association.
 (use-package markdown-ts-mode
