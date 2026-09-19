@@ -108,6 +108,7 @@
 ;; Prefer Tree-sitter major modes when both Emacs and an installed grammar
 ;; support them.  The grammars themselves are supplied by Home Manager.
 (use-package treesit
+  :bind ("C-=" . treesit-cycle-sexp-thing)
   :config
   (dolist (mapping '((c-mode c-ts-mode c)
                      (c++-mode c++-ts-mode cpp)
