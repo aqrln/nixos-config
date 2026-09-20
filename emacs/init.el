@@ -55,6 +55,25 @@
 (setq find-file-visit-truename nil
       vc-follow-symlinks nil)
 
+;; Settings from the newcomers preset theme that I like.
+(setopt delete-selection-mode t)
+(setopt save-interprogram-paste-before-kill t)
+(setopt imenu-auto-rescan t)
+(setopt view-read-only t)
+(setopt repeat-mode t)
+(setopt column-number-mode t)
+(setopt mode-line-compact 'long)
+(setopt savehist-mode t)
+(setopt save-place-mode t)
+(setopt tab-bar-history-mode t)
+(setopt dired-auto-revert-buffer t)
+(setopt dired-mouse-drag-files t)
+(setopt shell-command-prompt-show-cwd t)
+(setopt compilation-scroll-output 'first-error)
+(setopt indent-tabs-mode nil)
+(setopt editorconfig-mode t)
+(setopt vc-deduce-backend-nonvc-modes t)
+
 ;; Share the Wayland clipboard with terminal frames via wl-copy/wl-paste.
 (use-package xclip
   :config
@@ -243,11 +262,6 @@
   (add-to-list 'eglot-server-programs '(nix-ts-mode . ("nil")))
   (add-to-list 'eglot-server-programs
                '(toml-ts-mode . ("tombi" "lsp"))))
-
-;; Keep minibuffer history between sessions.
-(use-package savehist
-  :init
-  (savehist-mode))
 
 ;; A compact vertical display for minibuffer completion candidates.
 (use-package vertico
