@@ -74,6 +74,15 @@
 (setopt editorconfig-mode t)
 (setopt vc-deduce-backend-nonvc-modes t)
 
+;; Flyspell settings.
+(setq ispell-program-name "aspell"
+      flyspell-delay-use-timer t)
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(with-eval-after-load 'flyspell
+  (keymap-unset flyspell-mode-map "C-.")
+  (keymap-unset flyspell-mode-map "C-;"))
+
 ;; Share the Wayland clipboard with terminal frames via wl-copy/wl-paste.
 (use-package xclip
   :config

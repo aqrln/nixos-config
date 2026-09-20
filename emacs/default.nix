@@ -158,6 +158,7 @@ in
   };
 
   home.packages = [
+    (pkgs.aspellWithDicts (dicts: with dicts; [ en ]))
     codex-acp
     pkgs.imagemagick
     pkgs.libsixel
