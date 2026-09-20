@@ -234,6 +234,11 @@
   :bind (("C->" . expreg-expand)
          ("C-<" . expreg-contract)))
 
+;; Let Eglot advertise and expand server-provided snippets.  Eglot enables
+;; yas-minor-mode in a buffer when a snippet needs expansion.
+(use-package yasnippet
+  :demand t)
+
 ;; Start the installed Nix, Rust, and TOML language servers automatically.
 (defun my/eglot-disable-inlay-hints ()
   "Keep Eglot inlay hints opt-in for newly managed buffers."

@@ -122,6 +122,7 @@ in
         vc-jj
         vertico
         with-editor
+        yasnippet
       ];
 
     extraConfig = ''
