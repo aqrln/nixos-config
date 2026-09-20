@@ -80,6 +80,7 @@ in
         cargo-mode
         consult
         corfu
+        dape
         embark
         embark-consult
         envrc

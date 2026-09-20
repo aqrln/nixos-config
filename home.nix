@@ -23,6 +23,7 @@ let
   ];
 
   devToolsPackages = with pkgs; [
+    gdb
     gnumake
     pkg-config
     python3

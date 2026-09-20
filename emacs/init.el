@@ -186,6 +186,109 @@
   (keymap-set cargo-minor-mode-map "C-c C-a"
               'cargo-mode-command-map))
 
+(defun my/dape-rust-test-artifacts ()
+  "Read Cargo test artifacts from JSON lines in the current buffer."
+  (save-excursion
+    (goto-char (point-min))
+    (let (artifacts)
+      (while (not (eobp))
+        (when (looking-at "{")
+          (let ((message
+                 (condition-case nil
+                     (json-parse-string
+                      (buffer-substring-no-properties
+                       (line-beginning-position) (line-end-position))
+                      :object-type 'alist :null-object nil :false-object nil)
+                   (json-parse-error nil))))
+            (when (and (equal (alist-get 'reason message) "compiler-artifact")
+                       (eq (alist-get 'test (alist-get 'profile message)) t)
+                       (stringp (alist-get 'executable message)))
+              (push message artifacts))))
+        (forward-line 1))
+      (seq-uniq (nreverse artifacts)
+                (lambda (a b)
+                  (equal (alist-get 'executable a)
+                         (alist-get 'executable b)))))))
+
+(defun my/dape-rust-test-select (config)
+  "Select a built test executable and test for Dape CONFIG."
+  (let* ((artifacts (with-current-buffer (compilation-find-buffer)
+                      (my/dape-rust-test-artifacts)))
+         (choices
+          (mapcar (lambda (artifact)
+                    (cons (file-relative-name (alist-get 'executable artifact)
+                                              (dape-config-get config 'command-cwd))
+                          artifact))
+                  artifacts)))
+    (unless choices
+      (user-error "No test executables found; use cargo test --no-run --message-format=json-render-diagnostics"))
+    (let* ((artifact
+            (if (length= choices 1)
+                (cdar choices)
+              (cdr (assoc (completing-read "Test executable: " choices nil t)
+                          choices))))
+           (program (alist-get 'executable artifact))
+           ;; Cargo runs each test from its package directory, including
+           ;; when the build was started at a workspace root.
+           (default-directory
+            (or (plist-get config :cwd)
+                (file-name-directory (alist-get 'manifest_path artifact))))
+           (test-environment process-environment)
+           (test-exec-path exec-path)
+           (tests
+            (with-temp-buffer
+              (setq-local process-environment test-environment
+                          exec-path test-exec-path)
+              (unless (eq 0 (process-file program nil t nil "--list" "--format=terse"))
+                (user-error "Cannot list tests in %s: %s" program (buffer-string)))
+              (goto-char (point-min))
+              (let (names)
+                (while (re-search-forward "^\\(.+\\): test\r?$" nil t)
+                  (push (match-string-no-properties 1) names))
+                (nreverse names)))))
+      (unless tests
+        (user-error "No standard Rust tests found in %s" program))
+      (let ((test (completing-read "Debug test: " (cons "<all tests>" tests) nil t)))
+        (setf (plist-get config :program) program
+              (plist-get config :cwd) default-directory
+              (plist-get config :args)
+              (vconcat (plist-get config :args)
+                       (unless (equal test "<all tests>")
+                         (vector test "--exact" "--include-ignored")))
+              ;; Restart reuses this selection; a new M-x dape prompts again.
+              (plist-get config 'fn) nil))
+      config)))
+
+(defun my/dape-rust-test-prepare (config)
+  "Arrange to select tests after Dape compiles CONFIG."
+  (unless (plist-get config 'compile)
+    (user-error "The Rust test preset requires a Cargo test build command"))
+  ;; Dape applies `fn' before compilation, then again after a successful
+  ;; build.  Defer selection until Cargo has emitted the executable paths.
+  (setf (plist-get config 'fn) #'my/dape-rust-test-select)
+  config)
+
+;; Use GDB's built-in DAP server, with the Rust toolchain's pretty-printers.
+;; M-x dape: rust-gdb :program "target/debug/<binary>"
+;; M-x dape: rust-gdb-test (build, then select an executable and test)
+(use-package dape
+  :custom
+  (dape-buffer-window-arrangement 'gud)
+  :config
+  (let ((config (copy-tree (alist-get 'gdb dape-configs))))
+    (setf (plist-get config 'modes) '(rust-mode rust-ts-mode)
+          (plist-get config 'command) "rust-gdb"
+          (plist-get config 'compile) "cargo build"
+          (plist-get config :program) "target/debug/")
+    (setf (alist-get 'rust-gdb dape-configs) config))
+  (let ((config (copy-tree (alist-get 'rust-gdb dape-configs))))
+    (setf (plist-get config 'compile)
+          "cargo test --no-run --message-format=json-render-diagnostics"
+          (plist-get config 'fn) #'my/dape-rust-test-prepare
+          (plist-get config :program) nil
+          (plist-get config :args) ["--nocapture" "--test-threads=1"])
+    (setf (alist-get 'rust-gdb-test dape-configs) config)))
+
 ;; Emacs does not yet include a native `fish-ts-mode'.  Keep fish-mode's
 ;; editing support while attaching the native Tree-sitter parser.
 (defun my/fish-treesit-setup ()
