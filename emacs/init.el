@@ -325,11 +325,12 @@
   :demand t
   :custom
   (corfu-auto t)
+  (corfu-auto-delay 0.3)
+  (corfu-auto-prefix 4)
   (corfu-cycle t)
   (corfu-preselect 'prompt)
   :bind (:map corfu-map
-              ("M-SPC" . corfu-insert-separator)
-              ("M-g" . corfu-first))
+              ("M-SPC" . corfu-insert-separator))
   :config
   (global-corfu-mode))
 
