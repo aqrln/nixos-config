@@ -427,8 +427,7 @@
 (use-package embark-consult
   :after (embark consult))
 
-;; Completion popup while editing buffers.  M-SPC inserts a separator when
-;; using Orderless, and M-g moves to the first candidate.
+;; Completion popup while editing buffers.
 (use-package corfu
   :demand t
   :custom
@@ -438,6 +437,10 @@
   (corfu-cycle t)
   (corfu-preselect 'prompt)
   :bind (:map corfu-map
+              ([remap previous-line] . nil)
+              ([remap next-line] . nil)
+              ("M-p" . corfu-previous)
+              ("M-n" . corfu-next)
               ("M-SPC" . corfu-insert-separator))
   :config
   (global-corfu-mode))
