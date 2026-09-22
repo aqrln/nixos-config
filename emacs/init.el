@@ -137,6 +137,13 @@
 ;; support them.  The grammars themselves are supplied by Home Manager.
 (use-package treesit
   :bind ("C-=" . treesit-cycle-sexp-thing)
+  :preface
+  (defun my/treesit-prefer-node-sexps ()
+    "Start with node navigation in modes that support cycling sexp things."
+    (when (eq forward-sexp-function #'treesit-forward-sexp-list)
+      (treesit-cycle-sexp-thing)))
+  :hook
+  (after-change-major-mode . my/treesit-prefer-node-sexps)
   :config
   (dolist (mapping '((c-mode c-ts-mode c)
                      (c++-mode c++-ts-mode cpp)
