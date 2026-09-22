@@ -475,7 +475,8 @@ Preserve COMMAND, ARGUMENTS and REST for all other requests."
               ("M-SPC" . corfu-insert-separator))
   :config
   (global-corfu-mode)
-  (corfu-popupinfo-mode 1))
+  (corfu-popupinfo-mode 1)
+  (corfu-mouse-mode 1))
 
 ;; Let commands in Emacs shells open files in this Emacs instance.
 (use-package with-editor
