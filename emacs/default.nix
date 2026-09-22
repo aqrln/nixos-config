@@ -95,6 +95,7 @@ in
         majutsu
         nix-ts-mode
         orderless
+        ron-mode
         rust-mode
         solarized-theme
         xclip

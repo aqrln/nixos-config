@@ -363,6 +363,9 @@ Preserve COMMAND, ARGUMENTS and REST for all other requests."
   :hook
   (nix-ts-mode . my/nix-ts-indent-error-fallback))
 
+(use-package ron-mode
+  :mode "\\.ron\\'")
+
 ;; Expand and contract the region along syntax-tree boundaries.
 (use-package expreg
   :bind (("C->" . expreg-expand)
