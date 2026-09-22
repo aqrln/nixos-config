@@ -61,6 +61,7 @@ in
   imports = [
     ./helix
     ./emacs
+    ./gdb
   ];
 
   home.stateVersion = "26.05";

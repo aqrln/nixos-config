@@ -275,9 +275,33 @@
   :custom
   (dape-buffer-window-arrangement 'gud)
   :config
+  (defcustom my/dape-single-thread-stepping t
+    "Keep other threads paused during Dape steps when supported.
+Continue still resumes all threads.  Disable this if a step needs
+another thread to make progress, for example when waiting for a lock."
+    :type 'boolean
+    :group 'dape)
+
+  (defun my/dape-request-single-thread (original conn command arguments &rest rest)
+    "Add single-thread stepping to requests sent by ORIGINAL on CONN.
+Preserve COMMAND, ARGUMENTS and REST for all other requests."
+    (when (and my/dape-single-thread-stepping
+               (memq command '(:next :stepIn :stepOut))
+               (dape--capable-p conn :supportsSingleThreadExecutionRequests))
+      ;; GDB's DAP adapter resets scheduler-locking for each request;
+      ;; setting it once in the REPL does not affect Dape's next step.
+      (setq arguments (plist-put (copy-sequence arguments) :singleThread t)))
+    (apply original conn command arguments rest))
+
+  (advice-add 'dape-request :around #'my/dape-request-single-thread)
+
   (let ((config (copy-tree (alist-get 'gdb dape-configs))))
     (setf (plist-get config 'modes) '(rust-mode rust-ts-mode)
           (plist-get config 'command) "rust-gdb"
+          ;; Dape installs pending breakpoints before loading the executable.
+          ;; Parse their conditions as Rust from the start (not default C).
+          (plist-get config 'command-args)
+          (append (plist-get config 'command-args) '("-iex" "set language rust"))
           (plist-get config 'compile) "cargo build"
           (plist-get config :program) "target/debug/")
     (setf (alist-get 'rust-gdb dape-configs) config))

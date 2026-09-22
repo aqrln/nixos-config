@@ -1,4 +1,4 @@
-;;; dape-rust-tests.el --- Rust test preset checks -*- lexical-binding: t; -*-
+;;; dape-rust-tests.el --- Rust presets and stepping checks -*- lexical-binding: t; -*-
 
 ;; emacs --batch -q -l emacs/tests/dape-rust-tests.el -f ert-run-tests-batch-and-exit
 (require 'ert)
@@ -29,6 +29,42 @@
    "{\"reason\":\"compiler-artifact\",\"profile\":{\"test\":true},\"executable\":\"/tmp/custom target/unit-123\",\"manifest_path\":\"/tmp/member/Cargo.toml\"}\n"
    "{\"reason\":\"compiler-artifact\",\"profile\":{\"test\":true},\"executable\":\"/tmp/custom target/integration-456\",\"manifest_path\":\"/tmp/member/Cargo.toml\"}\n"
    "{\"reason\":\"build-finished\",\"success\":true}\n"))
+
+(ert-deftest my/dape-single-thread-stepping-requests ()
+  ;; Exercise Dape's real commands and request advice up to the transport.
+  (dolist (enabled '(nil t))
+    (dolist (supported '(nil t))
+      (let ((my/dape-single-thread-stepping enabled)
+            (dape--request-blocking nil)
+            (thread-arguments (list :threadId 17))
+            sent)
+        (cl-letf (((symbol-function 'dape--capabilities)
+                   (lambda (_conn)
+                     (list :supportsSingleThreadExecutionRequests supported
+                           :supportsSteppingGranularity t)))
+                  ((symbol-function 'dape--stopped-threads)
+                   (lambda (_conn) '(17)))
+                  ((symbol-function 'dape--thread-id-object)
+                   (lambda (_conn) thread-arguments))
+                  ((symbol-function 'jsonrpc-async-request)
+                   (lambda (_conn command arguments &rest _)
+                     (push (cons command arguments) sent))))
+          (dape-next 'test-connection)
+          (dape-step-in 'test-connection)
+          (dape-step-out 'test-connection)
+          (dape-continue 'test-connection)
+          (dape-request 'test-connection :threads nil)
+          (should (= (length sent) 5))
+          (dolist (command '(:next :stepIn :stepOut))
+            (let ((arguments (alist-get command sent)))
+              (should (eq (plist-get arguments :singleThread)
+                          (and enabled supported)))
+              (should (= (plist-get arguments :threadId) 17))
+              (should (equal (plist-get arguments :granularity)
+                             (symbol-name dape-stepping-granularity)))))
+          (should (equal (alist-get :continue sent) '(:threadId 17)))
+          (should-not (alist-get :threads sent))
+          (should (equal thread-arguments '(:threadId 17))))))))
 
 (ert-deftest my/dape-rust-artifacts-use-cargo-output ()
   (with-temp-buffer
